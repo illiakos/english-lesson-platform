@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { CompanyMatchSection } from '../../types/lesson'
+import { assetUrl } from '../../utils/assetUrl'
 
 interface CompanyMatchProps {
   section: CompanyMatchSection
@@ -41,7 +42,7 @@ export default function CompanyMatch({ section, onComplete }: CompanyMatchProps)
                   <span className="text-xs font-bold text-slate-400">{item.company}</span>
                 ) : (
                   <img
-                    src={item.logo}
+                    src={assetUrl(item.logo)}
                     alt={item.company}
                     onError={() => setImageErrors((prev) => ({ ...prev, [item.company]: true }))}
                     className="max-h-full max-w-full object-contain"

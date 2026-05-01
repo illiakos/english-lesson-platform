@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { WarmUpQuestionsSection } from '../../types/lesson'
+import { assetUrl } from '../../utils/assetUrl'
 
 interface WarmUpQuestionsProps {
   section: WarmUpQuestionsSection
@@ -29,18 +30,22 @@ export default function WarmUpQuestions({ section, onComplete }: WarmUpQuestions
           imageErrors[index] ? (
             <div
               key={image}
-              className="flex h-32 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-100 to-slate-100 text-xs font-semibold text-slate-400 sm:h-40"
+              className="flex aspect-4/3 items-center justify-center rounded-2xl bg-linear-to-br from-orange-100 to-slate-100 text-xs font-semibold text-slate-400 ring-1 ring-stone-200/60 sm:aspect-video"
             >
               Photo {index + 1}
             </div>
           ) : (
-            <img
+            <div
               key={image}
-              src={image}
-              onError={() => setImageErrors((prev) => ({ ...prev, [index]: true }))}
-              alt={`Work scene ${index + 1}`}
-              className="h-32 w-full rounded-2xl object-cover sm:h-40"
-            />
+              className="flex aspect-4/3 w-full items-center justify-center overflow-hidden rounded-2xl bg-linear-to-br from-stone-100 via-orange-50/25 to-stone-100 p-2 ring-1 ring-stone-200/70 sm:aspect-video"
+            >
+              <img
+                src={assetUrl(image)}
+                onError={() => setImageErrors((prev) => ({ ...prev, [index]: true }))}
+                alt={`Work scene ${index + 1}`}
+                className="max-h-full max-w-full rounded-lg object-contain"
+              />
+            </div>
           )
         ))}
       </div>

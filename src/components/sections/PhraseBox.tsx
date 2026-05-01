@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { PhraseBoxSection } from '../../types/lesson'
+import { assetUrl } from '../../utils/assetUrl'
 
 interface PhraseBoxProps {
   section: PhraseBoxSection
@@ -38,16 +39,16 @@ export default function PhraseBox({ section, onComplete }: PhraseBoxProps) {
             >
               {/* Photo */}
               {imageErrors[index] ? (
-                <div className="flex h-32 items-center justify-center bg-gradient-to-br from-orange-100 to-slate-100 text-xs font-semibold text-slate-400">
+                <div className="flex aspect-5/4 items-center justify-center bg-linear-to-br from-orange-100 to-slate-100 text-xs font-semibold text-slate-400 ring-1 ring-stone-200/60">
                   Picture {index + 1}
                 </div>
               ) : (
-                <div className="relative h-32 overflow-hidden">
+                <div className="relative flex aspect-5/4 w-full items-center justify-center overflow-hidden bg-linear-to-br from-stone-100 via-orange-50/30 to-stone-100 p-3 shadow-inner ring-1 ring-stone-200/60">
                   <img
-                    src={card.image}
+                    src={assetUrl(card.image)}
                     alt={`Phrase ${index + 1}`}
                     onError={() => setImageErrors((prev) => ({ ...prev, [index]: true }))}
-                    className="h-full w-full object-cover"
+                    className="max-h-full max-w-full object-contain"
                   />
                   {isCorrect && (
                     <div className="absolute inset-0 flex items-center justify-center bg-green-600/30">

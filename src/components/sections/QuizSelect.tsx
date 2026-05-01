@@ -1,0 +1,184 @@
+import { useState } from 'react'
+import type { QuizSelectSection } from '../../types/lesson'
+
+interface Props {
+  section: QuizSelectSection
+  onComplete: (id: string) => void
+}
+
+export default function QuizSelect({ section, onComplete }: Props) {
+  const [answers, setAnswers] = useState<Record<number, string>>({})
+  const [checked, setChecked] = useState(false)
+
+  const results = section.questions.map((q, i) => ({
+    correct: answers[i] === q.answer,
+    answered: !!answers[i],
+  }))
+  const correctCount = results.filter((r) => r.correct).length
+  const allCorrect = correctCount === section.questions.length
+
+  const renderSentence = (sentence: string, index: number) => {
+    const result = results[index]
+    const isCorrect = checked && result.correct
+    const isWrong = checked && result.answered && !result.correct
+
+    const selectEl = (
+      <select
+        value={answers[index] ?? ''}
+        onChange={(e) => setAnswers((p) => ({ ...p, [index]: e.target.value }))}
+        disabled={checked && isCorrect}
+        className={`rounded-xl px-3 py-1.5 text-sm font-semibold ring-1 outline-none transition ${
+          isCorrect
+            ? 'bg-green-100 text-green-800 ring-green-300'
+            : isWrong
+            ? 'bg-red-50 text-red-800 ring-red-300'
+            : 'bg-white ring-slate-200 focus:ring-orange-400'
+        }`}
+      >
+        <option value="">Choose…</option>
+        {section.options.map((o) => (
+          <option key={o} value={o}>
+            {o}
+          </option>
+        ))}
+      </select>
+    )
+
+    if (!sentence.includes('___')) {
+      return (
+        <div className="space-y-2">
+          <p className="text-sm italic text-slate-700">{sentence}</p>
+          {selectEl}
+        </div>
+      )
+    }
+
+    const parts = sentence.split('___')
+    return (
+      <div className="flex flex-wrap items-center gap-1 text-sm text-slate-800">
+        <span>{parts[0]}</span>
+        {selectEl}
+        <span>{parts[1] ?? ''}</span>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-5">
+      <h2 className="text-2xl font-extrabold text-green-700">
+        {section.emoji} {section.title}
+      </h2>
+      <p className="text-sm text-slate-500">{section.instruction}</p>
+
+      {/* Options reference chips */}
+      <div className="flex flex-wrap gap-2">
+        {section.options.map((o) => (
+          <span
+            key={o}
+            className="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-800 ring-1 ring-orange-200"
+          >
+            {o}
+          </span>
+        ))}
+      </div>
+
+      <div className="space-y-2.5">
+        {section.questions.map((q, i) => {
+          const result = results[i]
+          const isCorrect = checked && result.correct
+          const isWrong = checked && result.answered && !result.correct
+
+          return (
+            <div
+              key={i}
+              className={`rounded-2xl p-4 ring-1 transition-all ${
+                isCorrect
+                  ? 'bg-green-50 ring-green-200'
+                  : isWrong
+                  ? 'bg-red-50 ring-red-200'
+                  : 'bg-slate-50 ring-slate-200'
+              }`}
+            >
+              <div className="flex items-start gap-3">
+                <span
+                  className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
+                    isCorrect
+                      ? 'bg-green-600 text-white'
+                      : isWrong
+                      ? 'bg-red-400 text-white'
+                      : 'bg-slate-200 text-slate-600'
+                  }`}
+                >
+                  {isCorrect ? '✓' : isWrong ? '✕' : i + 1}
+                </span>
+                <div className="flex-1">
+                  {renderSentence(q.sentence, i)}
+                  {isWrong && (
+                    <p className="mt-1.5 text-xs font-semibold text-green-700">
+                      ✓ {q.answer}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      {checked && (
+        <p
+          className={`text-sm font-semibold ${
+            allCorrect ? 'text-green-700' : 'text-slate-700'
+          }`}
+        >
+          {allCorrect
+            ? '🎉 All correct!'
+            : `${correctCount} / ${section.questions.length} correct`}
+        </p>
+      )}
+
+      {/* Explanations shown after checking */}
+      {checked && section.explanations && section.explanations.length > 0 && (
+        <div className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
+          <p className="mb-2 text-[11px] font-bold uppercase tracking-widest text-slate-400">
+            Quick reminder
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {section.explanations.map((e) => (
+              <div
+                key={e.term}
+                className="rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-slate-200"
+              >
+                <span className="font-bold text-orange-600">{e.term}</span>
+                <span className="text-slate-500"> = {e.meaning}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => {
+            setChecked(true)
+            if (allCorrect) onComplete(section.id)
+          }}
+          className="rounded-xl bg-orange-500 px-5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-orange-600 active:scale-95 transition-all"
+        >
+          Check answers
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setAnswers({})
+            setChecked(false)
+          }}
+          className="rounded-xl bg-slate-100 px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-200 active:scale-95 transition-all"
+        >
+          Reset
+        </button>
+      </div>
+    </div>
+  )
+}

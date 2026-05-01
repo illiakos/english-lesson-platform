@@ -14,6 +14,13 @@ export type SectionType =
   | 'email-reading'
   | 'writing-task'
   | 'results-checklist'
+  | 'vocabulary-categories'
+  | 'picture-labeling'
+  | 'fill-gaps'
+  | 'quiz-select'
+  | 'image-match'
+  | 'dialogue-reading'
+  | 'advice-cards'
 
 export interface BaseSection {
   id: string
@@ -39,10 +46,12 @@ export interface WordListSection extends BaseSection {
 
 export interface GrammarTabsSection extends BaseSection {
   type: 'grammar-tabs'
+  imageSrc?: string
   tabs: {
     label: string
     rules: string[]
     examples: string[]
+    use?: string
   }[]
   highlights: string[]
 }
@@ -151,11 +160,78 @@ export interface EmailReadingSection extends BaseSection {
 export interface WritingTaskSection extends BaseSection {
   type: 'writing-task'
   prompt: string
+  imageSrc?: string
+  wordBank?: string[]
+  starter?: string
+  modelAnswer?: string
 }
 
 export interface ResultsChecklistSection extends BaseSection {
   type: 'results-checklist'
   checklist: string[]
+}
+
+// ── New section types ─────────────────────────────────────────────────────────
+
+export interface VocabCategoriesSection extends BaseSection {
+  type: 'vocabulary-categories'
+  categories: {
+    label: string
+    color: 'blue' | 'green' | 'orange' | 'purple' | 'pink' | 'yellow'
+    words: { word: string; definition: string }[]
+  }[]
+}
+
+export interface PictureLabelingSection extends BaseSection {
+  type: 'picture-labeling'
+  instruction: string
+  wordBank: string[]
+  cards: { image: string; answer: string }[]
+}
+
+export interface FillGapsSection extends BaseSection {
+  type: 'fill-gaps'
+  instruction: string
+  questions: {
+    sentence: string
+    hint: string
+    answer: string
+  }[]
+}
+
+export interface QuizSelectSection extends BaseSection {
+  type: 'quiz-select'
+  instruction: string
+  options: string[]
+  questions: {
+    sentence: string
+    answer: string
+  }[]
+  explanations?: { term: string; meaning: string }[]
+}
+
+export interface ImageMatchSection extends BaseSection {
+  type: 'image-match'
+  instruction: string
+  pairs: {
+    question: string
+    image: string
+    label: string
+  }[]
+}
+
+export interface DialogueReadingSection extends BaseSection {
+  type: 'dialogue-reading'
+  imageSrc?: string
+  characters: { name: string; colorClass: string }[]
+  lines: { speaker: string; text: string }[]
+  questions: { question: string; sampleAnswer: string }[]
+}
+
+export interface AdviceCardsSection extends BaseSection {
+  type: 'advice-cards'
+  functionalLanguage: string[]
+  cards: { situation: string; sampleAnswer: string }[]
 }
 
 export type LessonSection =
@@ -174,9 +250,20 @@ export type LessonSection =
   | EmailReadingSection
   | WritingTaskSection
   | ResultsChecklistSection
+  | VocabCategoriesSection
+  | PictureLabelingSection
+  | FillGapsSection
+  | QuizSelectSection
+  | ImageMatchSection
+  | DialogueReadingSection
+  | AdviceCardsSection
 
 export interface Lesson {
+  id: string
   title: string
   level: string
+  topic?: string
+  description?: string
+  coverImage?: string
   sections: LessonSection[]
 }

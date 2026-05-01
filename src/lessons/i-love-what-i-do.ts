@@ -1,8 +1,12 @@
 import type { Lesson } from '../types/lesson'
 
 const lesson: Lesson = {
+  id: 'i-love-what-i-do',
   title: 'I love what I do',
   level: 'A1/A2',
+  topic: 'Work and jobs',
+  description: 'Explore workplace vocabulary, practise Present Simple and Continuous, and write your own job application email.',
+  coverImage: '/assets/i-love-what-i-do/hero.jpg',
   sections: [
     {
       id: 'hero',

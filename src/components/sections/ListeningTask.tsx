@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { ListeningTaskSection } from '../../types/lesson'
+import { assetUrl } from '../../utils/assetUrl'
 
 interface ListeningTaskProps {
   section: ListeningTaskSection
@@ -36,7 +37,7 @@ export default function ListeningTask({ section, onComplete }: ListeningTaskProp
             className="w-full"
             onError={() => setAudioMissing(true)}
           >
-            <source src={section.audioSrc} />
+            <source src={assetUrl(section.audioSrc)} />
           </audio>
         </div>
       ) : (

@@ -1,12 +1,27 @@
+import { useEffect, useState } from 'react'
+import type { Lesson } from './types/lesson'
+import LessonPicker from './components/LessonPicker'
 import LessonRenderer from './components/LessonRenderer'
-import lesson from './lessons/i-love-what-i-do'
+import PageContainer from './components/common/PageContainer'
 
-function App() {
+export default function App() {
+  const [activeLesson, setActiveLesson] = useState<Lesson | null>(null)
+
+  /* Scroll to top when navigating between picker and lesson */
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [activeLesson])
+
   return (
-    <main className="mx-auto min-h-screen max-w-6xl p-4 md:p-8">
-      <LessonRenderer lesson={lesson} />
-    </main>
+    <PageContainer>
+      {activeLesson ? (
+        <LessonRenderer
+          lesson={activeLesson}
+          onBack={() => setActiveLesson(null)}
+        />
+      ) : (
+        <LessonPicker onSelectLesson={setActiveLesson} />
+      )}
+    </PageContainer>
   )
 }
-
-export default App

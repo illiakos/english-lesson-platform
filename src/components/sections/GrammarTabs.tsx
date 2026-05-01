@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { GrammarTabsSection } from '../../types/lesson'
+import { assetUrl } from '../../utils/assetUrl'
 
 interface GrammarTabsProps {
   section: GrammarTabsSection
@@ -7,6 +8,7 @@ interface GrammarTabsProps {
 
 export default function GrammarTabs({ section }: GrammarTabsProps) {
   const [activeTab, setActiveTab] = useState(section.tabs[0]?.label ?? '')
+  const [imageError, setImageError] = useState(false)
   const current = section.tabs.find((tab) => tab.label === activeTab) ?? section.tabs[0]
 
   return (
@@ -14,6 +16,29 @@ export default function GrammarTabs({ section }: GrammarTabsProps) {
       <h2 className="text-2xl font-extrabold text-green-700">
         {section.emoji} {section.title}
       </h2>
+
+      {/* Optional header image */}
+      {section.imageSrc && (
+        <div className="overflow-hidden rounded-2xl ring-1 ring-stone-200/70">
+          {imageError ? (
+            <div className="flex aspect-21/9 items-center justify-center bg-linear-to-br from-slate-800 via-slate-700 to-slate-900 sm:aspect-21/10">
+              <div className="text-center">
+                <div className="text-4xl">📖</div>
+                <p className="mt-1 text-sm font-bold text-slate-300">Grammar</p>
+              </div>
+            </div>
+          ) : (
+            <div className="flex aspect-21/9 w-full items-center justify-center bg-linear-to-br from-stone-100 via-orange-50/30 to-violet-50/40 p-4 sm:aspect-21/10 sm:p-6">
+              <img
+                src={assetUrl(section.imageSrc)}
+                alt="Grammar"
+                onError={() => setImageError(true)}
+                className="max-h-full max-w-full object-contain"
+              />
+            </div>
+          )}
+        </div>
+      )}
 
       {/* ── Tabs ─────────────────────────────────────────────── */}
       <div className="flex rounded-2xl bg-slate-100 p-1.5 gap-1">
@@ -39,7 +64,7 @@ export default function GrammarTabs({ section }: GrammarTabsProps) {
       {/* ── Tab content ──────────────────────────────────────── */}
       <div className="anim-slide space-y-4" key={activeTab}>
 
-        {/* Rules box */}
+        {/* Rules / structure box */}
         <div className="rounded-2xl bg-slate-900 p-5 text-slate-100">
           <p className="mb-3 text-[11px] font-bold uppercase tracking-widest text-slate-400">
             Structure
@@ -53,6 +78,16 @@ export default function GrammarTabs({ section }: GrammarTabsProps) {
             ))}
           </ul>
         </div>
+
+        {/* When to use */}
+        {current?.use && (
+          <div className="rounded-2xl border border-blue-100 bg-blue-50 p-4">
+            <p className="mb-1 text-[11px] font-bold uppercase tracking-widest text-blue-600">
+              When to use
+            </p>
+            <p className="text-sm text-blue-900 leading-relaxed">{current.use}</p>
+          </div>
+        )}
 
         {/* Examples */}
         <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
