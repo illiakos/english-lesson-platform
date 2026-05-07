@@ -1,4 +1,5 @@
 import type { Lesson } from '../types/lesson'
+import healthcareHospital from './healthcare-hospital'
 import iLoveWhatIDo from './i-love-what-i-do'
 import whatToWear from './what-to-wear'
 
@@ -7,6 +8,7 @@ import whatToWear from './what-to-wear'
  * To add a new lesson: import it here and add to this array.
  */
 export const allLessons: Lesson[] = [
+  healthcareHospital,
   iLoveWhatIDo,
   whatToWear,
 ]
