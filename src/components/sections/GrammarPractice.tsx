@@ -8,7 +8,10 @@ interface GrammarPracticeProps {
 
 type Tab = 'A' | 'B' | 'C'
 
+const DEFAULT_ACTIVITY_A_CHOICES = ['Present Simple', 'Present Continuous']
+
 export default function GrammarPractice({ section, onComplete }: GrammarPracticeProps) {
+  const activityAChoices = section.activityATenseChoices ?? DEFAULT_ACTIVITY_A_CHOICES
   const [activeTab, setActiveTab] = useState<Tab>('A')
   const [aAnswers, setAAnswers] = useState<Record<number, string>>({})
   const [bAnswers, setBAnswers] = useState<Record<number, string>>({})
@@ -80,8 +83,9 @@ export default function GrammarPractice({ section, onComplete }: GrammarPractice
                   className="rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-slate-200 outline-none focus:ring-orange-400"
                 >
                   <option value="">Choose…</option>
-                  <option value="Present Simple">Present Simple</option>
-                  <option value="Present Continuous">Present Continuous</option>
+                  {activityAChoices.map((label) => (
+                    <option key={label} value={label}>{label}</option>
+                  ))}
                 </select>
               </div>
             )

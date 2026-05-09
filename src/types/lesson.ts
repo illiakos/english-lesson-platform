@@ -120,9 +120,11 @@ export interface TrueFalseQuizSection extends BaseSection {
 
 export interface GrammarPracticeSection extends BaseSection {
   type: 'grammar-practice'
+  /** Dropdown labels for Activity A. Defaults to Present Simple / Present Continuous. */
+  activityATenseChoices?: string[]
   activityA: {
     sentence: string
-    answer: 'Present Simple' | 'Present Continuous'
+    answer: string
   }[]
   activityB: {
     sentence: string
