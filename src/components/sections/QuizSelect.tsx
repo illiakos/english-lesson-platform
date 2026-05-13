@@ -6,9 +6,22 @@ interface Props {
   onComplete: (id: string) => void
 }
 
+function questionOptions(
+  q: QuizSelectSection['questions'][number],
+  section: QuizSelectSection,
+): string[] {
+  return q.options ?? section.options ?? []
+}
+
 export default function QuizSelect({ section, onComplete }: Props) {
   const [answers, setAnswers] = useState<Record<number, string>>({})
   const [checked, setChecked] = useState(false)
+
+  const allHaveOwnOptions =
+    section.questions.length > 0 &&
+    section.questions.every((q) => (q.options?.length ?? 0) > 0)
+  const globalOptions = section.options ?? []
+  const showGlobalChips = globalOptions.length > 0 && !allHaveOwnOptions
 
   const results = section.questions.map((q, i) => ({
     correct: answers[i] === q.answer,
@@ -18,6 +31,8 @@ export default function QuizSelect({ section, onComplete }: Props) {
   const allCorrect = correctCount === section.questions.length
 
   const renderSentence = (sentence: string, index: number) => {
+    const q = section.questions[index]
+    const opts = questionOptions(q, section)
     const result = results[index]
     const isCorrect = checked && result.correct
     const isWrong = checked && result.answered && !result.correct
@@ -36,7 +51,7 @@ export default function QuizSelect({ section, onComplete }: Props) {
         }`}
       >
         <option value="">Choose…</option>
-        {section.options.map((o) => (
+        {opts.map((o) => (
           <option key={o} value={o}>
             {o}
           </option>
@@ -49,16 +64,42 @@ export default function QuizSelect({ section, onComplete }: Props) {
         <div className="space-y-2">
           <p className="text-sm italic text-slate-700">{sentence}</p>
           {selectEl}
+          {q.options && q.options.length > 0 && (
+            <div className="flex flex-wrap gap-2 pt-1">
+              {q.options.map((o) => (
+                <span
+                  key={o}
+                  className="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-800 ring-1 ring-orange-200"
+                >
+                  {o}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       )
     }
 
     const parts = sentence.split('___')
     return (
-      <div className="flex flex-wrap items-center gap-1 text-sm text-slate-800">
-        <span>{parts[0]}</span>
-        {selectEl}
-        <span>{parts[1] ?? ''}</span>
+      <div className="space-y-2">
+        <div className="flex flex-wrap items-center gap-1 text-sm text-slate-800">
+          <span>{parts[0]}</span>
+          {selectEl}
+          <span>{parts[1] ?? ''}</span>
+        </div>
+        {q.options && q.options.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {q.options.map((o) => (
+              <span
+                key={o}
+                className="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-800 ring-1 ring-orange-200"
+              >
+                {o}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
     )
   }
@@ -70,17 +111,18 @@ export default function QuizSelect({ section, onComplete }: Props) {
       </h2>
       <p className="text-sm text-slate-500">{section.instruction}</p>
 
-      {/* Options reference chips */}
-      <div className="flex flex-wrap gap-2">
-        {section.options.map((o) => (
-          <span
-            key={o}
-            className="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-800 ring-1 ring-orange-200"
-          >
-            {o}
-          </span>
-        ))}
-      </div>
+      {showGlobalChips && (
+        <div className="flex flex-wrap gap-2">
+          {globalOptions.map((o) => (
+            <span
+              key={o}
+              className="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-800 ring-1 ring-orange-200"
+            >
+              {o}
+            </span>
+          ))}
+        </div>
+      )}
 
       <div className="space-y-2.5">
         {section.questions.map((q, i) => {
@@ -137,7 +179,6 @@ export default function QuizSelect({ section, onComplete }: Props) {
         </p>
       )}
 
-      {/* Explanations shown after checking */}
       {checked && section.explanations && section.explanations.length > 0 && (
         <div className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
           <p className="mb-2 text-[11px] font-bold uppercase tracking-widest text-slate-400">

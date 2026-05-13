@@ -91,51 +91,54 @@ export default function DialogueReading({ section, onComplete, isCompleted }: Pr
         })}
       </div>
 
-      {/* Comprehension questions */}
-      <div className="space-y-3">
-        <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
-          Comprehension questions
-        </p>
-        {section.questions.map((item, i) => (
-          <div
-            key={item.question}
-            className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200"
-          >
-            <label className="block">
-              <span className="flex items-start gap-2 font-semibold text-slate-800">
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-orange-100 text-[11px] font-bold text-orange-700">
-                  {i + 1}
+      {section.questions.length > 0 && (
+        <div className="space-y-3">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
+            Comprehension questions
+          </p>
+          {section.questions.map((item, i) => (
+            <div
+              key={item.question}
+              className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200"
+            >
+              <label className="block">
+                <span className="flex items-start gap-2 font-semibold text-slate-800">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-orange-100 text-[11px] font-bold text-orange-700">
+                    {i + 1}
+                  </span>
+                  {item.question}
                 </span>
-                {item.question}
-              </span>
-              <input
-                value={answers[i] ?? ''}
-                onChange={(e) =>
-                  setAnswers((prev) => ({ ...prev, [i]: e.target.value }))
-                }
-                placeholder="Your answer…"
-                className="mt-2 w-full rounded-xl border-0 bg-white px-3 py-2.5 text-sm ring-1 ring-slate-200 outline-none focus:ring-orange-400"
-              />
-            </label>
-            {showSamples && (
-              <p className="mt-2 flex items-start gap-1.5 text-sm">
-                <span className="font-bold text-green-600">Sample:</span>
-                <span className="text-green-700">{item.sampleAnswer}</span>
-              </p>
-            )}
-          </div>
-        ))}
-      </div>
+                <input
+                  value={answers[i] ?? ''}
+                  onChange={(e) =>
+                    setAnswers((prev) => ({ ...prev, [i]: e.target.value }))
+                  }
+                  placeholder="Your answer…"
+                  className="mt-2 w-full rounded-xl border-0 bg-white px-3 py-2.5 text-sm ring-1 ring-slate-200 outline-none focus:ring-orange-400"
+                />
+              </label>
+              {showSamples && (
+                <p className="mt-2 flex items-start gap-1.5 text-sm">
+                  <span className="font-bold text-green-600">Sample:</span>
+                  <span className="text-green-700">{item.sampleAnswer}</span>
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Buttons */}
       <div className="flex flex-wrap gap-2">
-        <button
-          type="button"
-          onClick={() => setShowSamples((p) => !p)}
-          className="rounded-xl bg-slate-100 px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-200 active:scale-95 transition-all"
-        >
-          {showSamples ? 'Hide sample answers' : 'Show sample answers'}
-        </button>
+        {section.questions.length > 0 && (
+          <button
+            type="button"
+            onClick={() => setShowSamples((p) => !p)}
+            className="rounded-xl bg-slate-100 px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-200 active:scale-95 transition-all"
+          >
+            {showSamples ? 'Hide sample answers' : 'Show sample answers'}
+          </button>
+        )}
         <button
           type="button"
           onClick={() => onComplete(section.id)}

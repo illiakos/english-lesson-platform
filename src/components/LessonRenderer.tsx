@@ -25,6 +25,7 @@ import QuizSelect from './sections/QuizSelect'
 import RankingTask from './sections/RankingTask'
 import ResultsChecklist from './sections/ResultsChecklist'
 import SentenceBuilder from './sections/SentenceBuilder'
+import SentenceMatch from './sections/SentenceMatch'
 import TrueFalseQuiz from './sections/TrueFalseQuiz'
 import VocabularyCategories from './sections/VocabularyCategories'
 import VocabularyMatch from './sections/VocabularyMatch'
@@ -68,6 +69,7 @@ function renderSection({ section, isCompleted, onComplete, progress }: SectionRe
     case 'image-match':         return <ImageMatch section={section} onComplete={onComplete} />
     case 'dialogue-reading':    return <DialogueReading section={section} onComplete={onComplete} isCompleted={isCompleted} />
     case 'advice-cards':        return <AdviceCards section={section} onComplete={onComplete} isCompleted={isCompleted} />
+    case 'sentence-match':      return <SentenceMatch section={section} onComplete={onComplete} isCompleted={isCompleted} />
     default:                    return null
   }
 }
@@ -94,6 +96,7 @@ const SECTION_LABELS: Partial<Record<string, string>> = {
   'image-match': 'Activity',
   'dialogue-reading': 'Reading',
   'advice-cards': 'Speaking',
+  'sentence-match': 'Activity',
 }
 
 function ArrowLeftIcon() {

@@ -1,6 +1,7 @@
 import type { Lesson } from '../types/lesson'
 import healthcareHospital from './healthcare-hospital'
 import iLoveWhatIDo from './i-love-what-i-do'
+import meetingTheGuests from './meeting-the-guests'
 import presentPerfectVsPastSimple from './present-perfect-vs-past-simple'
 import whatToWear from './what-to-wear'
 
@@ -11,6 +12,7 @@ import whatToWear from './what-to-wear'
 export const allLessons: Lesson[] = [
   healthcareHospital,
   iLoveWhatIDo,
+  meetingTheGuests,
   whatToWear,
   presentPerfectVsPastSimple,
 ]

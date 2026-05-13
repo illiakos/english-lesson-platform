@@ -13,6 +13,7 @@ function normalize(s: string) {
 export default function FillGaps({ section, onComplete }: Props) {
   const [answers, setAnswers] = useState<Record<number, string>>({})
   const [checked, setChecked] = useState(false)
+  const [activeGap, setActiveGap] = useState<number | null>(null)
 
   const results = section.questions.map((q, i) => ({
     correct: normalize(answers[i] ?? '') === normalize(q.answer),
@@ -38,6 +39,7 @@ export default function FillGaps({ section, onComplete }: Props) {
         <input
           value={answers[index] ?? ''}
           onChange={(e) => setAnswers((p) => ({ ...p, [index]: e.target.value }))}
+          onFocus={() => setActiveGap(index)}
           disabled={checked && isCorrect}
           placeholder="…"
           className={`mx-1 inline-block w-44 rounded-lg px-2 py-0.5 text-sm font-semibold ring-1 outline-none transition ${
@@ -59,6 +61,37 @@ export default function FillGaps({ section, onComplete }: Props) {
         {section.emoji} {section.title}
       </h2>
       <p className="text-sm text-slate-500">{section.instruction}</p>
+
+      {section.wordBank && section.wordBank.length > 0 && (
+        <div>
+          <p className="mb-2 text-[11px] font-bold uppercase tracking-widest text-slate-400">
+            Word bank
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {section.wordBank.map((w) => (
+              <button
+                key={w}
+                type="button"
+                onClick={() => {
+                  const i = activeGap ?? 0
+                  if (checked && results[i]?.correct) return
+                  setAnswers((prev) => {
+                    const cur = (prev[i] ?? '').trim()
+                    const next = cur ? `${cur} ${w}` : w
+                    return { ...prev, [i]: next }
+                  })
+                }}
+                className="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-800 ring-1 ring-orange-200 hover:bg-orange-200 active:scale-95 transition-all"
+              >
+                {w}
+              </button>
+            ))}
+          </div>
+          <p className="mt-1.5 text-xs text-slate-400">
+            Tap a gap first, then a word to add it — or click a word to fill gap 1.
+          </p>
+        </div>
+      )}
 
       <div className="space-y-3">
         {section.questions.map((q, i) => {

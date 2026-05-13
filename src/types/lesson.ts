@@ -21,6 +21,7 @@ export type SectionType =
   | 'image-match'
   | 'dialogue-reading'
   | 'advice-cards'
+  | 'sentence-match'
 
 export interface BaseSection {
   id: string
@@ -164,6 +165,8 @@ export interface WritingTaskSection extends BaseSection {
   prompt: string
   imageSrc?: string
   wordBank?: string[]
+  /** Numbered short-answer prompts (roleplay / multi-part writing). */
+  prompts?: string[]
   starter?: string
   modelAnswer?: string
 }
@@ -194,6 +197,8 @@ export interface PictureLabelingSection extends BaseSection {
 export interface FillGapsSection extends BaseSection {
   type: 'fill-gaps'
   instruction: string
+  /** Optional reference words shown above the tasks. */
+  wordBank?: string[]
   questions: {
     sentence: string
     hint: string
@@ -204,10 +209,13 @@ export interface FillGapsSection extends BaseSection {
 export interface QuizSelectSection extends BaseSection {
   type: 'quiz-select'
   instruction: string
-  options: string[]
+  /** Default options when a question omits `options`. */
+  options?: string[]
   questions: {
     sentence: string
     answer: string
+    /** If set, used for this question only instead of `section.options`. */
+    options?: string[]
   }[]
   explanations?: { term: string; meaning: string }[]
 }
@@ -236,6 +244,11 @@ export interface AdviceCardsSection extends BaseSection {
   cards: { situation: string; sampleAnswer: string }[]
 }
 
+export interface SentenceMatchSection extends BaseSection {
+  type: 'sentence-match'
+  items: { problem: string; answer: string }[]
+}
+
 export type LessonSection =
   | HeroSection
   | WordListSection
@@ -259,6 +272,7 @@ export type LessonSection =
   | ImageMatchSection
   | DialogueReadingSection
   | AdviceCardsSection
+  | SentenceMatchSection
 
 export interface Lesson {
   id: string
