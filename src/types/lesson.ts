@@ -22,6 +22,10 @@ export type SectionType =
   | 'dialogue-reading'
   | 'advice-cards'
   | 'sentence-match'
+  | 'country-article'
+  | 'picture-vocabulary'
+  | 'dialogue-gap-fill'
+  | 'error-correction'
 
 export interface BaseSection {
   id: string
@@ -68,6 +72,7 @@ export interface WarmUpQuestionsSection extends BaseSection {
 
 export interface VocabularyMatchSection extends BaseSection {
   type: 'vocabulary-match'
+  imageSrc?: string
   items: {
     word: string
     definition: string
@@ -173,6 +178,7 @@ export interface WritingTaskSection extends BaseSection {
 
 export interface ResultsChecklistSection extends BaseSection {
   type: 'results-checklist'
+  imageSrc?: string
   checklist: string[]
 }
 
@@ -209,6 +215,7 @@ export interface FillGapsSection extends BaseSection {
 export interface QuizSelectSection extends BaseSection {
   type: 'quiz-select'
   instruction: string
+  imageSrc?: string
   /** Default options when a question omits `options`. */
   options?: string[]
   questions: {
@@ -246,7 +253,57 @@ export interface AdviceCardsSection extends BaseSection {
 
 export interface SentenceMatchSection extends BaseSection {
   type: 'sentence-match'
+  imageSrc?: string
   items: { problem: string; answer: string }[]
+}
+
+export interface CountryArticleSection extends BaseSection {
+  type: 'country-article'
+  instruction: string
+  note?: string
+  countries: {
+    name: string
+    imageSrc: string
+    facts: string[]
+  }[]
+}
+
+export interface PictureVocabularySection extends BaseSection {
+  type: 'picture-vocabulary'
+  imageSrc?: string
+  instruction: string
+  wordBank: string[]
+  cards: { image?: string; answer: string; label: string }[]
+  gapInstruction: string
+  gapWordBank: string[]
+  gaps: {
+    sentence: string
+    answer: string
+  }[]
+}
+
+export interface DialogueGapFillSection extends BaseSection {
+  type: 'dialogue-gap-fill'
+  imageSrc?: string
+  instruction: string
+  characters: { name: string; colorClass: string }[]
+  wordBank: string[]
+  lines: { speaker: string; text: string }[]
+  answers: string[]
+}
+
+export interface ErrorCorrectionSection extends BaseSection {
+  type: 'error-correction'
+  instruction: string
+  imageSrc?: string
+  example: {
+    sentence: string
+    correction: string
+  }
+  tasks: {
+    sentence: string
+    answer: string
+  }[]
 }
 
 export type LessonSection =
@@ -273,6 +330,10 @@ export type LessonSection =
   | DialogueReadingSection
   | AdviceCardsSection
   | SentenceMatchSection
+  | CountryArticleSection
+  | PictureVocabularySection
+  | DialogueGapFillSection
+  | ErrorCorrectionSection
 
 export interface Lesson {
   id: string

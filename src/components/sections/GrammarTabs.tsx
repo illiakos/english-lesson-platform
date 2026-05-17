@@ -41,7 +41,7 @@ export default function GrammarTabs({ section }: GrammarTabsProps) {
       )}
 
       {/* ── Tabs ─────────────────────────────────────────────── */}
-      <div className="flex rounded-2xl bg-slate-100 p-1.5 gap-1">
+      <div className="flex flex-wrap gap-1 rounded-2xl bg-slate-100 p-1.5">
         {section.tabs.map((tab) => {
           const isActive = tab.label === activeTab
           return (
@@ -49,7 +49,7 @@ export default function GrammarTabs({ section }: GrammarTabsProps) {
               key={tab.label}
               type="button"
               onClick={() => setActiveTab(tab.label)}
-              className={`flex-1 rounded-xl py-2 text-sm font-bold transition-all ${
+              className={`min-w-28 flex-1 rounded-xl px-2 py-2 text-sm font-bold transition-all ${
                 isActive
                   ? 'bg-white text-orange-600 shadow-sm ring-1 ring-slate-200'
                   : 'text-slate-500 hover:text-slate-700'

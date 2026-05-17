@@ -11,8 +11,11 @@ import ProgressBar from './common/ProgressBar'
 import SectionCard from './common/SectionCard'
 import AdviceCards from './sections/AdviceCards'
 import CompanyMatch from './sections/CompanyMatch'
+import CountryArticleSection from './sections/CountryArticleSection'
+import DialogueGapFill from './sections/DialogueGapFill'
 import DialogueReading from './sections/DialogueReading'
 import EmailReading from './sections/EmailReading'
+import ErrorCorrection from './sections/ErrorCorrection'
 import FillGaps from './sections/FillGaps'
 import GrammarPractice from './sections/GrammarPractice'
 import GrammarTabs from './sections/GrammarTabs'
@@ -21,6 +24,7 @@ import ImageMatch from './sections/ImageMatch'
 import ListeningTask from './sections/ListeningTask'
 import PhraseBox from './sections/PhraseBox'
 import PictureLabeling from './sections/PictureLabeling'
+import PictureVocabulary from './sections/PictureVocabulary'
 import QuizSelect from './sections/QuizSelect'
 import RankingTask from './sections/RankingTask'
 import ResultsChecklist from './sections/ResultsChecklist'
@@ -70,6 +74,10 @@ function renderSection({ section, isCompleted, onComplete, progress }: SectionRe
     case 'dialogue-reading':    return <DialogueReading section={section} onComplete={onComplete} isCompleted={isCompleted} />
     case 'advice-cards':        return <AdviceCards section={section} onComplete={onComplete} isCompleted={isCompleted} />
     case 'sentence-match':      return <SentenceMatch section={section} onComplete={onComplete} isCompleted={isCompleted} />
+    case 'country-article':     return <CountryArticleSection section={section} onComplete={onComplete} isCompleted={isCompleted} />
+    case 'picture-vocabulary':  return <PictureVocabulary section={section} onComplete={onComplete} />
+    case 'dialogue-gap-fill':   return <DialogueGapFill section={section} onComplete={onComplete} />
+    case 'error-correction':    return <ErrorCorrection section={section} onComplete={onComplete} />
     default:                    return null
   }
 }
@@ -97,6 +105,10 @@ const SECTION_LABELS: Partial<Record<string, string>> = {
   'dialogue-reading': 'Reading',
   'advice-cards': 'Speaking',
   'sentence-match': 'Activity',
+  'country-article': 'Reading',
+  'picture-vocabulary': 'Vocabulary',
+  'dialogue-gap-fill': 'Dialogue',
+  'error-correction': 'Grammar',
 }
 
 function ArrowLeftIcon() {

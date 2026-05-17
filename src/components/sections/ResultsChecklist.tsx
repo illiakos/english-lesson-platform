@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import type { ResultsChecklistSection } from '../../types/lesson'
+import { assetUrl } from '../../utils/assetUrl'
 
 interface ResultsChecklistProps {
   section: ResultsChecklistSection
@@ -15,6 +17,7 @@ function starRating(progress: number) {
 }
 
 export default function ResultsChecklist({ section, progress }: ResultsChecklistProps) {
+  const [imageError, setImageError] = useState(false)
   const completedCount = Math.round((progress / 100) * section.checklist.length)
 
   return (
@@ -25,6 +28,30 @@ export default function ResultsChecklist({ section, progress }: ResultsChecklist
         <h2 className="text-2xl font-extrabold text-green-700">{section.emoji} {section.title}</h2>
         <p className="mt-1 text-sm text-slate-500">Here is what you practised in this lesson</p>
       </div>
+
+      {section.imageSrc && (
+        <div className="overflow-hidden rounded-2xl ring-1 ring-stone-200/70">
+          {imageError ? (
+            <div className="flex aspect-21/10 items-center justify-center bg-linear-to-br from-green-100 via-white to-orange-100">
+              <div className="text-center">
+                <div className="text-4xl font-black text-green-600">Done</div>
+                <p className="mt-1 text-sm font-bold text-slate-500">
+                  Add final image later
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="flex aspect-21/10 w-full items-center justify-center bg-linear-to-br from-stone-100 via-green-50/40 to-orange-50/40 p-4 sm:p-6">
+              <img
+                src={assetUrl(section.imageSrc)}
+                alt={section.title}
+                onError={() => setImageError(true)}
+                className="max-h-full max-w-full object-contain"
+              />
+            </div>
+          )}
+        </div>
+      )}
 
       {/* ── Big progress circle ──────────────────────────────── */}
       <div className="flex flex-col items-center gap-2">

@@ -1,4 +1,5 @@
 import type { Lesson } from '../types/lesson'
+import cultureShockRules from './culture-shock-rules'
 import healthcareHospital from './healthcare-hospital'
 import iLoveWhatIDo from './i-love-what-i-do'
 import meetingTheGuests from './meeting-the-guests'
@@ -13,6 +14,7 @@ export const allLessons: Lesson[] = [
   healthcareHospital,
   iLoveWhatIDo,
   meetingTheGuests,
+  cultureShockRules,
   whatToWear,
   presentPerfectVsPastSimple,
 ]

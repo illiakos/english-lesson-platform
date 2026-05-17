@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import type { VocabularyMatchSection } from '../../types/lesson'
+import { assetUrl } from '../../utils/assetUrl'
 
 interface VocabularyMatchProps {
   section: VocabularyMatchSection
@@ -14,6 +15,7 @@ export default function VocabularyMatch({ section, onComplete, isCompleted }: Vo
   )
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [checked, setChecked] = useState(false)
+  const [imageError, setImageError] = useState(false)
 
   const correctCount = section.items.filter(
     (item) => answers[item.word] === item.definition,
@@ -31,6 +33,30 @@ export default function VocabularyMatch({ section, onComplete, isCompleted }: Vo
       <h2 className="text-2xl font-extrabold text-green-700">
         {section.emoji} {section.title}
       </h2>
+
+      {section.imageSrc && (
+        <div className="overflow-hidden rounded-2xl ring-1 ring-stone-200/70">
+          {imageError ? (
+            <div className="flex aspect-21/10 items-center justify-center bg-linear-to-br from-orange-100 via-white to-violet-100">
+              <div className="text-center">
+                <div className="text-4xl font-black text-orange-500">Vocab</div>
+                <p className="mt-1 text-sm font-bold text-slate-500">
+                  Add image later
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="flex aspect-21/10 w-full items-center justify-center bg-linear-to-br from-stone-100 via-orange-50/35 to-purple-50/40 p-4 sm:p-6">
+              <img
+                src={assetUrl(section.imageSrc)}
+                alt={section.title}
+                onError={() => setImageError(true)}
+                className="max-h-full max-w-full object-contain"
+              />
+            </div>
+          )}
+        </div>
+      )}
 
       {/* ── Pairs ────────────────────────────────────────────── */}
       <div className="space-y-2.5">
