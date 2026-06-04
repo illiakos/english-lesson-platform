@@ -6,6 +6,20 @@ interface GrammarTabsProps {
   section: GrammarTabsSection
 }
 
+const PREPOSITIONS = ['TO', 'FOR', 'AT', 'IN', 'ON', 'OF', 'WITH', 'ABOUT']
+const PREP_PATTERN = new RegExp(`\\b(${PREPOSITIONS.join('|')})\\b`, 'g')
+
+function highlightPrepositions(text: string): React.ReactNode {
+  const parts = text.split(PREP_PATTERN)
+  return parts.map((part, i) =>
+    PREPOSITIONS.includes(part) ? (
+      <span key={i} className="font-bold text-orange-500">{part}</span>
+    ) : (
+      part
+    ),
+  )
+}
+
 export default function GrammarTabs({ section }: GrammarTabsProps) {
   const [activeTab, setActiveTab] = useState(section.tabs[0]?.label ?? '')
   const [imageError, setImageError] = useState(false)
@@ -64,21 +78,6 @@ export default function GrammarTabs({ section }: GrammarTabsProps) {
       {/* ── Tab content ──────────────────────────────────────── */}
       <div className="anim-slide space-y-4" key={activeTab}>
 
-        {/* Rules / structure box */}
-        <div className="rounded-2xl bg-slate-900 p-5 text-slate-100">
-          <p className="mb-3 text-[11px] font-bold uppercase tracking-widest text-slate-400">
-            Structure
-          </p>
-          <ul className="space-y-2">
-            {current?.rules.map((rule) => (
-              <li key={rule} className="flex items-start gap-2 font-mono text-sm">
-                <span className="mt-0.5 text-orange-400">→</span>
-                <span>{rule}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
         {/* When to use */}
         {current?.use && (
           <div className="rounded-2xl border border-blue-100 bg-blue-50 p-4">
@@ -89,6 +88,27 @@ export default function GrammarTabs({ section }: GrammarTabsProps) {
           </div>
         )}
 
+        {/* Rules — phrase cards style */}
+        <div className="rounded-2xl border border-green-100 bg-green-50/40 p-5">
+          <p className="mb-3 text-[11px] font-bold uppercase tracking-widest text-green-700">
+            Structure
+          </p>
+          <ul className="space-y-2">
+            {current?.rules.map((rule, i) =>
+              rule === '---' ? (
+                <li key={i} aria-hidden className="my-1 border-t border-green-200" />
+              ) : (
+                <li
+                  key={i}
+                  className="rounded-xl border border-green-200 bg-white px-4 py-2.5 text-sm text-slate-800 shadow-xs"
+                >
+                  <em>{highlightPrepositions(rule)}</em>
+                </li>
+              ),
+            )}
+          </ul>
+        </div>
+
         {/* Examples */}
         <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
           <p className="mb-3 text-[11px] font-bold uppercase tracking-widest text-slate-400">
@@ -98,7 +118,7 @@ export default function GrammarTabs({ section }: GrammarTabsProps) {
             {current?.examples.map((example) => (
               <li key={example} className="flex items-start gap-2 text-sm text-slate-700">
                 <span className="mt-0.5 text-green-500">✓</span>
-                <em>{example}</em>
+                <em>{highlightPrepositions(example)}</em>
               </li>
             ))}
           </ul>

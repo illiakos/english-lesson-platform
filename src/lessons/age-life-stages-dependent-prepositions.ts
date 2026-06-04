@@ -144,7 +144,39 @@ const lesson: Lesson = {
       ],
     },
 
-    // ── 3. Exercise 1 — Age vocabulary match ────────────────────────────────
+    // ── 3. Life stage periods — vocabulary ───────────────────────────────────
+    {
+      id: 'life-stage-periods',
+      type: 'vocabulary-categories',
+      title: 'Life Stage Periods',
+      emoji: '🔄',
+      categories: [
+        {
+          label: 'Life stage periods',
+          color: 'pink',
+          words: [
+            {
+              word: 'childhood',
+              definition: 'the time when you are a child — "She spent most of her childhood in the countryside."',
+            },
+            {
+              word: 'the teenage years',
+              definition: 'the time when someone is 13 to 19 years old — "He changed a lot during the teenage years."',
+            },
+            {
+              word: 'adulthood',
+              definition: 'the stage of life when a person is an adult — "Adulthood comes with more responsibilities."',
+            },
+            {
+              word: 'working life',
+              definition: 'the part of your life when you have a job or career — "She spent her working life as a doctor."',
+            },
+          ],
+        },
+      ],
+    },
+
+    // ── 4. Exercise 1 — Age vocabulary match ────────────────────────────────
     {
       id: 'age-match',
       type: 'vocabulary-match',
